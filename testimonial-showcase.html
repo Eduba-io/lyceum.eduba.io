@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clief Notes - Community Testimonials</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #08080A;
+    color: #E8E8EC;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+  }
+
+  .frame {
+    width: 1920px;
+    height: 1080px;
+    position: relative;
+    overflow: hidden;
+    background: #08080A;
+  }
+
+  /* Subtle grid */
+  .frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+    background-size: 80px 80px;
+    z-index: 0;
+  }
+
+  /* ═══ BACKGROUND SCREENSHOTS (dim, behind everything) ═══ */
+  .bg-screenshots {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .bg-shot {
+    position: absolute;
+    border: 1px solid rgba(255,255,255,0.03);
+    overflow: hidden;
+  }
+
+  .bg-shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.3) saturate(0.5);
+  }
+
+  /* ═══ HERO SCREENSHOTS (large, readable, front and center) ═══ */
+  .hero-screenshots {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+  }
+
+  .hero-shot {
+    position: absolute;
+    border: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03);
+    background: #111;
+  }
+
+  .hero-shot img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ═══ VIGNETTE + FADES ═══ */
+  .vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, transparent 15%, rgba(8,8,10,0.4) 50%, rgba(8,8,10,0.85) 100%);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .top-fade {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, rgba(8,8,10,0.95) 0%, transparent 100%);
+    z-index: 6;
+    pointer-events: none;
+  }
+
+  .bottom-fade {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 100px;
+    background: linear-gradient(to top, rgba(8,8,10,0.95) 0%, transparent 100%);
+    z-index: 6;
+    pointer-events: none;
+  }
+
+  /* ═══ CONTENT LAYER (title, quote card, bottom bar) ═══ */
+  .content-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .title-area {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  .title-area .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #4ADE80;
+    margin-bottom: 8px;
+  }
+
+  .title-area h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 40px;
+    font-weight: 700;
+    color: #F5F5F7;
+    letter-spacing: -1px;
+  }
+
+  .title-area h1 .accent { color: #4ADE80; }
+
+  /* ═══ LISSA QUOTE CARD (left side, compact) ═══ */
+  .quote-card {
+    position: absolute;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 340px;
+    background: rgba(14, 14, 16, 0.92);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 32px 28px 28px;
+    box-shadow:
+      0 24px 80px rgba(0,0,0,0.7),
+      0 0 0 1px rgba(255,255,255,0.02),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+    pointer-events: auto;
+    z-index: 12;
+  }
+
+  .quote-card::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 0;
+    width: 3px;
+    height: 80%;
+    background: linear-gradient(to bottom, transparent, #4ADE80, transparent);
+    opacity: 0.7;
+    box-shadow: 0 0 16px rgba(74,222,128,0.4), 0 0 40px rgba(74,222,128,0.15);
+  }
+
+  .quote-card .quote-mark {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 36px;
+    line-height: 1;
+    color: rgba(74,222,128,0.18);
+    margin-bottom: 2px;
+  }
+
+  .quote-card .quote-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #A0A0A8;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .quote-card .quote-author {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 18px;
+  }
+
+  .quote-card .author-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #F5F5F7;
+    margin-bottom: 8px;
+  }
+
+  .quote-card .author-role {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #D0D0D8;
+    line-height: 1.45;
+    font-weight: 500;
+  }
+
+  .quote-card .author-company {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: #4ADE80;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 10px;
+    text-shadow: 0 0 20px rgba(74,222,128,0.3);
+  }
+
+  /* Bottom */
+  .bottom-bar {
+    position: absolute;
+    bottom: 28px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  .bottom-bar .number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: #F5F5F7;
+  }
+
+  .bottom-bar .number .gold { color: #D4A853; }
+
+  /* Noise */
+  .noise {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 128px 128px;
+  }
+
+  .glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 1;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+
+  <!-- Ambient glows -->
+  <div class="glow-orb" style="width:600px;height:600px;top:25%;left:10%;background:rgba(74,222,128,0.03);"></div>
+  <div class="glow-orb" style="width:500px;height:500px;top:20%;right:20%;background:rgba(96,165,250,0.02);"></div>
+  <div class="glow-orb" style="width:400px;height:400px;bottom:15%;left:55%;background:rgba(212,168,83,0.02);"></div>
+
+  <!-- ═══ BACKGROUND SCREENSHOTS (dim fill) ═══ -->
+  <div class="bg-screenshots" id="bgLayer"></div>
+
+  <!-- Depth effects -->
+  <div class="vignette"></div>
+  <div class="top-fade"></div>
+  <div class="bottom-fade"></div>
+
+  <!-- ═══ HERO SCREENSHOTS (large, readable, filling center + right) ═══ -->
+  <div class="hero-screenshots">
+
+    <!-- ROW 1 - Top area, right of title -->
+    <div class="hero-shot" style="left:400px;top:95px;transform:rotate(-0.8deg);width:480px;">
+      <img src="screenshots/IMG_9199.PNG" alt="Learned more than Master thesis">
+    </div>
+    <div class="hero-shot" style="left:910px;top:95px;transform:rotate(0.6deg);width:460px;">
+      <img src="screenshots/momchil_deep.png" alt="Momchil - quantum mechanics to AI">
+    </div>
+    <div class="hero-shot" style="right:30px;top:95px;transform:rotate(-0.5deg);width:470px;">
+      <img src="screenshots/IMG_9186.PNG" alt="GreyBeardedBloke - best explainer">
+    </div>
+
+    <!-- ROW 2 - Middle band (FEATURED) -->
+    <div class="hero-shot" style="left:400px;top:280px;transform:rotate(0.3deg);width:820px;z-index:7;">
+      <img src="screenshots/michael_franklin.png" alt="Michael Franklin - graduate CS course">
+    </div>
+    <div class="hero-shot" style="left:980px;top:320px;transform:rotate(-0.7deg);width:680px;z-index:6;">
+      <img src="screenshots/dayo_samuel.png" alt="Dayo Samuel - 58 files, 9 video scripts">
+    </div>
+    <div class="hero-shot" style="right:30px;top:380px;transform:rotate(0.4deg);width:440px;">
+      <img src="screenshots/IMG_9190.PNG" alt="AntkytheraAI - elegance and simplicity">
+    </div>
+
+    <!-- ROW 3 - Lower band -->
+    <div class="hero-shot" style="left:420px;top:630px;transform:rotate(-0.6deg);width:460px;">
+      <img src="screenshots/IMG_9202.PNG" alt="Joshua McMullen - key piece for Claude Code">
+    </div>
+    <div class="hero-shot" style="left:910px;top:640px;transform:rotate(0.8deg);width:480px;">
+      <img src="screenshots/IMG_9217.PNG" alt="TheOtakuDev - seriously underrated">
+    </div>
+    <div class="hero-shot" style="right:30px;top:650px;transform:rotate(-0.4deg);width:450px;">
+      <img src="screenshots/IMG_9192.PNG" alt="ThyTruong - brilliant breakdown">
+    </div>
+
+    <!-- ROW 4 - Bottom (smaller to give room to center) -->
+    <div class="hero-shot" style="left:420px;bottom:15px;transform:rotate(0.7deg);width:340px;">
+      <img src="screenshots/IMG_9193.PNG" alt="DeonDonDotCom - blew my mind">
+    </div>
+    <div class="hero-shot" style="left:790px;bottom:20px;transform:rotate(-0.5deg);width:340px;">
+      <img src="screenshots/IMG_9226.PNG" alt="Cassy Js - project completed">
+    </div>
+    <div class="hero-shot" style="right:30px;bottom:10px;transform:rotate(0.6deg);width:340px;">
+      <img src="screenshots/IMG_9185.PNG" alt="GB007 - inspired, research paper">
+    </div>
+
+  </div>
+
+  <div class="noise"></div>
+
+  <!-- ═══ CONTENT LAYER ═══ -->
+  <div class="content-layer">
+
+    <div class="title-area">
+      <div class="label">From the community</div>
+      <h1>What <span class="accent">11,600+</span> members are saying</h1>
+    </div>
+
+    <!-- Lissa quote card - LEFT SIDE, compact -->
+    <div class="quote-card">
+      <div class="quote-mark">&ldquo;</div>
+      <p class="quote-text">A pleasure working with Jake and his team at Eduba.</p>
+      <div class="quote-author">
+        <p class="author-name">Lissa Pritchard</p>
+        <p class="author-role">Head of Innovation: Development,<br>Thought Leadership &<br>Customer Experience</p>
+        <p class="author-company">IAG</p>
+      </div>
+    </div>
+
+    <div class="bottom-bar">
+      <div class="number">11.6<span class="gold">k</span> members and growing</div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// Background fills (dimmed, behind everything)
+const bgFiles = [
+  "74dd57ab-e3bd-416e-9eee-449d3f18b94c.jpg",
+  "IMG_9187.PNG", "IMG_9188.PNG", "IMG_9191.PNG",
+  "IMG_9194.PNG", "IMG_9195.PNG", "IMG_9196.PNG", "IMG_9197.PNG",
+  "IMG_9200.PNG", "IMG_9201.PNG", "IMG_9204.PNG", "IMG_9205.PNG",
+  "IMG_9206.PNG", "IMG_9207.PNG", "IMG_9208.PNG", "IMG_9209.PNG",
+  "IMG_9210.PNG", "IMG_9211.PNG", "IMG_9213.PNG", "IMG_9214.PNG",
+  "IMG_9215.PNG", "IMG_9216.PNG", "IMG_9218.PNG", "IMG_9219.PNG",
+  "IMG_9220.PNG", "IMG_9222.PNG", "IMG_9223.PNG", "IMG_9224.PNG",
+  "IMG_9225.PNG", "IMG_9227.PNG", "IMG_9228.PNG", "IMG_9229.PNG",
+  "IMG_9230.PNG", "IMG_9231.PNG", "IMG_9232.PNG", "IMG_9233.PNG",
+];
+
+function seeded(i, seed) {
+  const x = Math.sin(i * 9301 + seed * 49297) * 49297;
+  return x - Math.floor(x);
+}
+
+const bgLayer = document.getElementById('bgLayer');
+const cols = 8;
+const rows = 5;
+const cellW = 1920 / cols;
+const cellH = 1080 / rows;
+
+bgFiles.forEach((file, i) => {
+  const col = i % cols;
+  const row = Math.floor(i / cols) % rows;
+  const baseX = col * cellW + seeded(i, 1) * (cellW * 0.3);
+  const baseY = row * cellH + seeded(i, 2) * (cellH * 0.25);
+  const w = 180 + seeded(i, 3) * 100;
+  const rot = (seeded(i, 4) - 0.5) * 5;
+
+  const div = document.createElement('div');
+  div.className = 'bg-shot';
+  div.style.cssText = `
+    left: ${baseX}px;
+    top: ${baseY}px;
+    width: ${w}px;
+    transform: rotate(${rot}deg);
+    opacity: 0.25;
+  `;
+  div.innerHTML = `<img src="screenshots/${file}" alt="" loading="lazy">`;
+  bgLayer.appendChild(div);
+});
+</script>
+</body>
+</html>
