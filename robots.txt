@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+Host: https://lyceum.eduba.io
+Sitemap: https://lyceum.eduba.io/sitemap.xml
